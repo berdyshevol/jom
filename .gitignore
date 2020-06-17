@@ -1,5 +1,7 @@
 Sprints/.idea
 Sprints/out
+.idea
+*.iml
 # Compiled class file
 *.class
 

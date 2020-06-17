@@ -35,13 +35,21 @@ class Square implements IPerimeter {
 }
 public class MyUtils {
     public double sumPerimeter(List<?> figures) {
-        if (figures.stream().anyMatch(figure -> figure == null)) {
+        if (!isValidList(figures)) {
             return 0;
         }
         return figures
                 .stream()
                 .map(figure -> ((IPerimeter)figure).getPerimeter())
                 .reduce(0.0, Double::sum);
+    }
+
+    private boolean isValidList(List<?> list) {
+        if (list == null || list.size() == 0
+                || list.stream().anyMatch(item -> item == null)) {
+            return false;
+        }
+        return true;
     }
 
     public static void main(String[] args) {

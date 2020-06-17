@@ -126,7 +126,8 @@ public class MyUtils {
         }
         return true;
     }
-
+    // ВОПРОС: этот метод removeDuplicates у меня повторяется во всех заданиях. Но он зависит от типа элементов списка
+    // есть ли возможность, чтобы он был универсальным (то есть одинаковым)
     private List<Shape> removeDuplicates(List<Shape> list) {
         return new ArrayList<>(new HashSet<>(list));
     }

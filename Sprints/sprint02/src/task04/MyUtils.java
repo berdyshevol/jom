@@ -62,7 +62,7 @@ class Manager extends Employee {
 
     @Override
     public BigDecimal getPayment() {
-        return super.getPayment().multiply(new BigDecimal(this.coefficient)).setScale(2); // TODO:
+        return super.getPayment().multiply(new BigDecimal(this.coefficient)).setScale(2);
     }
 
     @Override
@@ -89,22 +89,32 @@ class Manager extends Employee {
 public class MyUtils {
     public List<Employee> largestEmployees(List<Employee> workers) {
         ArrayList<Employee> result = new ArrayList<>();
-        if (workers == null || workers.size() == 0
-                || workers.stream().anyMatch(worker -> worker == null)) {
-            return result;
+        if (isValidList(workers)) {
+            List<Employee> noDuplicates = removeDuplicates(workers);
+            int maxExperience = maximalExperience(noDuplicates);
+            BigDecimal maxPayment = maximalPayment(noDuplicates);
+            result = noDuplicates
+                    .stream()
+                    .filter(
+                            employee ->
+                                    employee.getExperience() == maxExperience
+                                            || employee.getPayment().compareTo(maxPayment) == 0
+                    )
+                    .collect(Collectors.toCollection(ArrayList::new));
         }
-        ArrayList<Employee> noDuplicates = new ArrayList<>(new HashSet<>(workers));
-        int maxExperience = maximalExperience(noDuplicates);
-        BigDecimal maxPayment = maximalPayment(noDuplicates);
-        result = noDuplicates
-                .stream()
-                .filter(
-                        employee ->
-                                employee.getExperience() == maxExperience
-                                        || employee.getPayment().compareTo(maxPayment) == 0
-                )
-                .collect(Collectors.toCollection(ArrayList::new));
         return result;
+    }
+
+    private boolean isValidList(List<?> list) {
+        if (list == null || list.size() == 0 || list.stream().anyMatch(item -> item == null)) {
+            return false;
+        }
+        return true;
+    }
+    // ВОПРОС: этот метод removeDuplicates у меня повторяется во всех заданиях. Но он зависит от типа элементов списка
+    // есть ли возможность, чтобы он был универсальным (то есть одинаковым во всех заданиях, чтобы мне не переписывать его)
+    private List<Employee> removeDuplicates(List<Employee> list) {
+        return new ArrayList<>(new HashSet<>(list));
     }
 
     private int maximalExperience(List<Employee> employees) {

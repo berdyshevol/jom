@@ -129,31 +129,42 @@ class SuperPerson {
 
 /*public*/ class MyUtils {
     public List<Person> maxDuration(List<Person> persons) {
-        if (persons == null) {
-            return null;
-        }
         ArrayList<Person> result = new ArrayList<>();
-        if (persons.size() == 0) {
-            return result;
-        }
-        ArrayList<Person> noDuplicates = new ArrayList<>(new HashSet<>(persons));
-        Comparator<SuperPerson> compareByExperienceYears = Comparator.comparing(SuperPerson::getExperienceYears);
-        Comparator<SuperPerson> compareByStudyYears = Comparator.comparing(SuperPerson::getStudyYears);
-        ArrayList<SuperPerson> superPersons = convertToSuperPersonList(persons);
-        int maxExperienceYears = superPersons.stream().max(compareByExperienceYears).get().getExperienceYears();
-        int maxStudyYears = superPersons.stream().max(compareByStudyYears).get().getStudyYears();
-        for (Person person: noDuplicates) {
-            if (person instanceof Student) {
-                if (((Student) person).getStudyYears() == maxStudyYears) {
-                    result.add(person);
-                }
-            } else if (person instanceof Worker) {
-                if (((Worker) person).getExperienceYears() == maxExperienceYears) {
-                    result.add(person);
+        if (isValidList(persons)) {
+            List<Person> noDuplicates = removeDuplicates(persons);
+            ArrayList<SuperPerson> superPersons = convertToSuperPersonList(noDuplicates);
+            int maxExperienceYears = getMaxExperienceYears(superPersons);
+            int maxStudyYears = getMaxStudyYears(superPersons);
+            for (Person person : noDuplicates) {
+                if (person instanceof Student) {
+                    if (((Student) person).getStudyYears() == maxStudyYears) {
+                        result.add(person);
+                    }
+                } else if (person instanceof Worker) {
+                    if (((Worker) person).getExperienceYears() == maxExperienceYears) {
+                        result.add(person);
+                    }
                 }
             }
         }
         return result;
+    }
+
+    private boolean isValidList(List<?> list) {
+        if (list == null || list.size() == 0 || list.stream().anyMatch(item -> item == null)) {
+            return false;
+        }
+        return true;
+    }
+
+    private int getMaxExperienceYears(List<SuperPerson> superPersons) {
+        Comparator<SuperPerson> compareByExperienceYears = Comparator.comparing(SuperPerson::getExperienceYears);
+        return superPersons.stream().max(compareByExperienceYears).get().getExperienceYears();
+    }
+
+    private int getMaxStudyYears(List<SuperPerson> superPersons) {
+        Comparator<SuperPerson> compareByStudyYears = Comparator.comparing(SuperPerson::getStudyYears);
+        return superPersons.stream().max(compareByStudyYears).get().getStudyYears();
     }
 
     private ArrayList<SuperPerson> convertToSuperPersonList(List<Person> persons) {
@@ -162,6 +173,10 @@ class SuperPerson {
             result.add(new SuperPerson(person));
         }
         return result;
+    }
+
+    private List<Person> removeDuplicates(List<Person> list) {
+        return new ArrayList<>(new HashSet<>(list));
     }
 }
 
