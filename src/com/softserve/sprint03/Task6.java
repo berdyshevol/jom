@@ -2,6 +2,7 @@ package com.softserve.sprint03;
 
 import java.util.Arrays;
 import java.util.*;
+import java.util.stream.IntStream;
 
 enum SortOrder {
     ASC (1),
@@ -15,64 +16,112 @@ enum SortOrder {
     }
 }
 
-class AddressBook {
+class AddressBook implements Iterable {
     private NameAddressPair[] addressBook;
     private int counter;
 
     public AddressBook(int capacity) {
         this.addressBook = new NameAddressPair[capacity];
+        this.counter = 0;
     }
 
-    public boolean create(String firstName, String lastName) {
-        return true; // TODO:
+    public boolean create(String firstName, String lastName, String address) {
+        NameAddressPair.Person newPerson = new NameAddressPair.Person(firstName, lastName);
+        if (include(newPerson)) {
+            return false;
+        } else {
+            if (this.counter == this.addressBook.length) {
+                enlargeAddressBook();
+            }
+            add(newPerson, address);
+            return true;
+        }
+    }
+
+    private boolean include(NameAddressPair.Person newPerson) {
+        return Arrays.stream(this.addressBook).anyMatch(pair -> pair != null && pair.person.equals(newPerson));
+    }
+
+    private void enlargeAddressBook() {
+        NameAddressPair[] newAddressBook = Arrays.copyOf(this.addressBook, this.addressBook.length * 2);
+        this.addressBook = newAddressBook;
+    }
+
+    private void add(NameAddressPair.Person person, String address) {
+        this.addressBook[this.counter] = new NameAddressPair(person, address);
+        this.counter++;
     }
 
     public String read (String firstName, String lastName) {
-        return null; // TODO:
+        int i = findIndexOf(new NameAddressPair.Person(firstName, lastName));
+        return (i == -1) ? null : this.addressBook[i].getAddress();
     }
 
     public boolean update(String firstName, String lastName, String address) {
-        return true; // TODO:
+        NameAddressPair.Person newPerson = new NameAddressPair.Person(firstName, lastName);
+        int index = findIndexOf(newPerson);
+        if (index == -1) {
+            return false;
+        }
+        this.addressBook[index] = new NameAddressPair(newPerson, address);
+        return true;
+    }
+
+    public int findIndexOf(NameAddressPair.Person newPerson) {
+        return IntStream.range(0, this.counter).filter(i ->
+                  newPerson.equals(this.addressBook[i].getPerson())
+               ).findFirst().orElse(-1);
     }
 
     public boolean delete(String firstName, String lastName) {
-        return true; // TODO:
+        NameAddressPair.Person newPerson = new NameAddressPair.Person(firstName, lastName);
+        int i = findIndexOf(newPerson);
+        if ( i == -1) {
+            return false;
+        }
+        for (int j = i; j < this.counter - 1; j++) {
+            this.addressBook[j] = this.addressBook[j + 1];
+        }
+        this.counter--;
+        return true;
     }
 
     public int size() {
-        return this.addressBook.length;
+        return this.counter;
     }
 
-    public void sortBy(SortOrder person) {
-        // TODO:
+    public void sortedBy(SortOrder order) {
+        Arrays.sort(this.addressBook, new Comparator<NameAddressPair>() {
+            public int compare(NameAddressPair p1, NameAddressPair p2) {
+                int compareNames = order.getOrder() * p1.person.firstName.compareTo(p2.person.firstName);
+                return compareNames != 0
+                        ? compareNames
+                        : order.getOrder() * p1.person.lastName.compareTo(p2.person.lastName);
+            }
+        });
     }
 
-    public AddressBookIterator iterator() {
+    public Iterator<String> iterator() {
         return new AddressBookIterator();
     }
 
-    public class AddressBookIterator implements Iterator {
-        private int counter;
-
-        public AddressBookIterator() {
-            this.counter = 0;
-        }
+    private class AddressBookIterator implements Iterator<String> {
+        private int counter = 0;
 
         @Override
         public boolean hasNext() {
-            return this.counter < addressBook.length;
+            return this.counter < AddressBook.this.counter;
         }
 
         @Override
         public String next() {
             if (hasNext()) {
-                this.counter++;
                 return String
                         .format(
                                 "First name: %s, Last name: %s, Address: %s",
                                 addressBook[this.counter].getPerson().getFirstName(),
                                 addressBook[this.counter].getPerson().getLastName(),
-                                addressBook[this.counter].getAddress()
+                                addressBook[this.counter++].getAddress()
                         );
             } else throw new NoSuchElementException();
         }
@@ -82,25 +131,21 @@ class AddressBook {
         private final Person person;
         private String address;
 
-        public NameAddressPair(Person person, String address) {
+        private NameAddressPair(Person person, String address) {
             this.person = person;
             this.address = address;
         }
-
         public Person getPerson() {
             return person;
         }
-
         public String getAddress() {
             return address;
         }
 
         @Override
         public boolean equals(Object o) {
-            if (this == o) return true;
-            if (!(o instanceof NameAddressPair)) return false;
-            NameAddressPair that = (NameAddressPair) o;
-            return person.equals(that.person);
+            if (o == null) return false;
+            return person.equals(o);
         }
 
         @Override
@@ -115,11 +160,9 @@ class AddressBook {
                 this.firstName = firstName;
                 this.lastName = lastName;
             }
-
             public String getFirstName() {
                 return this.firstName;
             }
-
             public String getLastName() {
                 return this.lastName;
             }
@@ -127,16 +170,16 @@ class AddressBook {
             @Override
             public boolean equals(Object o) {
                 if (this == o) return true;
-                if (!(o instanceof Person)) return false;
+                if (o == null) return false;
                 Person person = (Person) o;
-                if (!Objects.equals(firstName, person.firstName)) return false;
-                return Objects.equals(lastName, person.lastName);
+                if (!firstName.equals(person.firstName)) return false;
+                return lastName.equals(person.lastName);
             }
 
             @Override
             public int hashCode() {
-                int result = firstName != null ? firstName.hashCode() : 0;
-                result = 31 * result + (lastName != null ? lastName.hashCode() : 0);
+                int result = firstName.hashCode();
+                result = 31 * result + lastName.hashCode();
                 return result;
             }
         }
@@ -144,4 +187,14 @@ class AddressBook {
 }
 
 public class Task6 {
+    public static void main(String[] args) {
+        String[] actual = new String[4];
+         AddressBook addressBook = new AddressBook(4);
+         addressBook.create("John", "Brown", "Address #1");
+         addressBook.create("Susan", "Brown", "Address # 4");
+         addressBook.create("Karen", "Davis", "Address #2");
+         addressBook.create("John", "Taylor", "Address #1");
+         addressBook.sortedBy(SortOrder.DESC);
+         addressBook.forEach(System.out::println);
+    }
 }
