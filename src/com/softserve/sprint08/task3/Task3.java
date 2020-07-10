@@ -12,7 +12,7 @@ class Interactor {
         System.out.println("Serving thread initializes the key");
         this.x = uo.apply(initializer);
         printf("key = %d", this.x);
-        notify();
+        notifyAll();
         wait();
         System.out.println("Serving thread resumed");
     }
@@ -22,7 +22,7 @@ class Interactor {
         printf("Consuming thread received the key. key = %d", this.x);
         this.x = bo.apply(this.x, operand2);
         printf("Consuming thread changed the key. key = %d", this.x);
-        notify();
+        notifyAll();
     }
 
     synchronized private void printf(String format, int d) {

@@ -12,9 +12,6 @@ class ParallelCalculator implements Runnable {
         this.binaryOperator = binaryOperator;
         this.operator1 = operator1;
         this.operator2 = operator2;
-        Thread t = new Thread( () -> {
-            run();
-        });
     }
 
     @Override
