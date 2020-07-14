@@ -1,0 +1,9 @@
+Select the correct statements
+
+
+Select one or more:
+a. Intermediate operations are lazy               <-- V
+b. Intermediate operations return Stream itself   <-- V
+c. Intermediate operations are only triggered when a terminal operation exists  <-- V
+d. Terminal operations are lazy
+e. Terminal operations terminate the pipeline and initiate stream processing    <-- V

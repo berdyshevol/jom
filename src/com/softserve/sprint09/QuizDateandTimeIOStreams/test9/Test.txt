@@ -1,0 +1,5 @@
+The LocalDateTime class from java.time package is immutable, thread-safe and correspond to ISO 8601 standard.
+
+Select one:
+-True <-- V
+-False

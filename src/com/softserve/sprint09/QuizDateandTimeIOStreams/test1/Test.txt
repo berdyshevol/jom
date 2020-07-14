@@ -1,0 +1,8 @@
+Which statements are true about Date class from java.util package?
+
+Select one or more:
+a. It is mutable, not thread-safe  <-- V
+b. It is immutable, thread-safe
+c. It is internationalizable and reflect UTC
+d. It is not internationalizable and not reflect UTC <-- V
+e. It represents an instant, not a date  <-- V

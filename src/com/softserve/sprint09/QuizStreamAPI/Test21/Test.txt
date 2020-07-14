@@ -1,0 +1,9 @@
+Select Intermediate operations
+
+
+Select one or more:
+a. peek()    <-- V
+b. collect()
+c. boxed()   <-- V
+d. forEach()
+e. filter()  <-- V

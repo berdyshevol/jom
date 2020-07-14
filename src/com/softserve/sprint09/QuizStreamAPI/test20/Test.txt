@@ -1,0 +1,9 @@
+Select the correct statements
+
+
+Select one or more:
+a. flatMap is intermediate stream operations  <-- V
+b. flatMap operation return a stream          <-- V
+c. map operation return simple value
+d. flatMap is Terminal stream operations
+e. map is intermediate stream operations      <-- V

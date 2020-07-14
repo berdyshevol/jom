@@ -1,0 +1,9 @@
+Select Terminal operations
+
+
+Select one or more:
+a. boxed()
+b. filter()
+c. forEach()  <-- V
+d. peek()
+e. collect()  <-- V

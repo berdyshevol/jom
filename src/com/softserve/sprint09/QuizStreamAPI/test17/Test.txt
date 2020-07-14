@@ -1,0 +1,8 @@
+Select the correct statements
+
+
+Select one or more:
+a. Stream doesn't contains elements     <-- V
+b. Stream contains elements
+c. Collection doesn't contains elements
+d. Collection contains elements         <-- V

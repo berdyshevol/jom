@@ -1,0 +1,8 @@
+Select the correct statements
+
+
+Select one or more:
+a. Change made on Collection make changes on the original Collection        <-- V
+b. Any change made on Collection doesn't reflect on the original Collection
+c. Change made on Stream  make changes on the original Collection
+d. Any change made on Stream doesn't reflect on the original Collection     <-- V

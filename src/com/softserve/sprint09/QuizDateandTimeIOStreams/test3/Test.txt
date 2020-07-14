@@ -1,0 +1,8 @@
+The instance of Date class contains:
+
+Select one:
+a. The string that represents given date and time
+b. The number of seconds  that have elapsed since midnight, January 1, 1900
+c. The number of milliseconds  that have elapsed since midnight, January 1, 1900
+d. The number of milliseconds  that have elapsed since midnight, January 1, 1970 <-- V
+e. The number of seconds  that have elapsed since midnight, January 1, 1970

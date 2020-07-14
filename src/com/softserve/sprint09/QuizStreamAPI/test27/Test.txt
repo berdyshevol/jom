@@ -1,0 +1,9 @@
+Select methods of Collectors class
+
+
+Select one or more:
+a. toSet();        <-- V
+b. supplier();
+c. toList();       <-- V
+d. groupingBy();   <-- V
+e. toCollection(); <-- V
